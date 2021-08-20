@@ -1,0 +1,36 @@
+{
+  "name": "dps-comments",
+  "version": "1.0.0",
+  "description": "comments microservice",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-davidpoza:davidpoza/dps-comments.git"
+  },
+  "author": "David Poza Suárez",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "celebrate": "^15.0.0",
+    "cors": "^2.8.5",
+    "cross-env": "^5.2.0",
+    "dayjs": "^1.10.3",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-jwt": "^6.1.0",
+    "express-rate-limit": "^5.0.0",
+    "helmet": "^3.18.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-fetch": "^2.6.1",
+    "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0",
+    "sequelize": "^6.3.5",
+    "sqlite3": "^5.0.1",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.10.0"
+  }
+}
