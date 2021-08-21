@@ -49,70 +49,34 @@ export default (app) => {
       }
     });
 
-  // route.patch('/:id',
-  //   middlewares.isAuth,
-  //   celebrate({
-  //     body: Joi.object({
-  //       accountId: Joi.number(),
-  //       amount: Joi.number(),
-  //       assCard: Joi.string(),
-  //       balance: Joi.number(),
-  //       comments: Joi.string(),
-  //       currency: Joi.string(),
-  //       date: Joi.string(),
-  //       description: Joi.string(),
-  //       emitterName: Joi.string(),
-  //       favourite: Joi.boolean(),
-  //       receipt: Joi.boolean(),
-  //       receiverName: Joi.string(),
-  //       tags: Joi.array().items(Joi.number()),
-  //       valueDate: Joi.string(),
-  //     }),
-  //   }),
-  //   async (req, res, next) => {
-  //     const transactionService = Container.get('transactionService');
-  //     const { id } = req.params;
-  //     const userId = req.user.id;
-  //     const {
-  //       accountId,
-  //       amount,
-  //       assCard,
-  //       balance,
-  //       comments,
-  //       date,
-  //       description,
-  //       emitterName,
-  //       favourite,
-  //       receiverName,
-  //       tags,
-  //       valueDate,
-  //     } = req.body;
-  //     try {
-  //       const transaction = await transactionService.updateById(id, userId,
-  //         {
-  //           accountId,
-  //           amount,
-  //           assCard,
-  //           balance,
-  //           comments,
-  //           date,
-  //           description,
-  //           emitterName,
-  //           favourite,
-  //           receiverName,
-  //           tags,
-  //           valueDate,
-  //         }
-  //       );
-  //       if (!transaction) {
-  //         res.sendStatus(404);
-  //       }
-  //       res.status(200).json(transaction);
-  //     } catch (err) {
-  //       loggerInstance.error('🔥 error: %o', err);
-  //       return next(err);
-  //     }
-  //   });
+  route.patch('/:id',
+    middlewares.isAuth,
+    celebrate({
+      body: Joi.object({
+        content: Joi.string().required(),
+      }),
+    }),
+    async (req, res, next) => {
+      const { id } = req.params;
+      const userId = req.user.id;
+      const {
+        content,
+      } = req.body;
+      try {
+        const message = await messageService.updateById(id, userId,
+          {
+            content
+          }
+        );
+        if (!message) {
+          res.sendStatus(404);
+        }
+        res.status(200).json(message);
+      } catch (err) {
+        loggerInstance.error('🔥 error: %o', err);
+        return next(err);
+      }
+    });
 
   // // get totals for each tag of given transactions
   // route.get('/tags',

@@ -62,8 +62,8 @@ export default class MessageService {
     return (this.getTemplate(message));
   }
 
-  async updateById(id, values) {
-    const affectedRows = await this.messageModel.update(values, { where: { id } });
+  async updateById(id, userId, values) {
+    const affectedRows = await this.messageModel.update(values, { where: { id, userId } });
     if (affectedRows === 0) {
       return null;
     }
