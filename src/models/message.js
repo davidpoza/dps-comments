@@ -21,6 +21,14 @@ export const definition = [
         key: 'id'
       }
     },
+    parentId: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'messages',
+        key: 'id'
+      }
+    },
     createdAt: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
     updatedAt: { type: Sequelize.DATE }
   }, {

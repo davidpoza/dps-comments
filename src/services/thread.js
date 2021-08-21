@@ -12,7 +12,6 @@ export default class ThreadService {
       return ({
         id: thread.id,
         url: thread.url,
-        threadId: thread.threadId,
         createdAt: thread.createdAt,
         updatedAt: thread.updatedAt,
       });
@@ -42,6 +41,14 @@ export default class ThreadService {
 
   async findById(id) {
     const thread = await this.threadModel.findOne({ where: { id } });
+    if (!thread) {
+      return null;
+    }
+    return (this.getTemplate(thread));
+  }
+
+  async findByUrl(url) {
+    const thread = await this.threadModel.findOne({ where: { url } });
     if (!thread) {
       return null;
     }

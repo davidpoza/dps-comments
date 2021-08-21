@@ -8,7 +8,7 @@ const route = Router();
 
 export default (app) => {
   const loggerInstance = Container.get('loggerInstance');
-
+  const messageService = Container.get('messageService');
   app.use('/messages', route);
 
   route.post('/',
@@ -17,13 +17,14 @@ export default (app) => {
       body: Joi.object({
         threadId: Joi.number().required(),
         content: Joi.string().required(),
+        parentId: Joi.number(),
       }),
     }),
     async (req, res, next) => {
-      const messageService = Container.get('messageService');
       const {
         threadId,
         content,
+        parentId,
        } = req.body;
       const userId = req.user?.id;
       try {
@@ -32,6 +33,7 @@ export default (app) => {
             threadId,
             userId,
             content,
+            parentId,
           }
         );
         if (!message) {
@@ -128,29 +130,28 @@ export default (app) => {
   //   }
   // });
 
-  // route.get('/:id?',
-  //   middlewares.isAuth,
-  //   async (req, res, next) => {
-  //     const { id } = req.params
-  //     const userId = req.user.id;
-  //     const { accountId, tags, limit, sort, offset, from, to, search } = req.query;
-  //     const tagsArray = tags ? tags.split(',').map((id) => parseInt(id, 10)) : undefined;
-  //     const transactionService = Container.get('transactionService');
-  //     try {
-  //       if (id) {
-  //         const transaction = await transactionService.findById({ id, userId });
-  //         if (!transaction) {
-  //           return res.sendStatus(404);
-  //         }
-  //         return res.status(200).json(transaction);
-  //       }
-  //       const transactions = await transactionService.findAll({ accountId, userId, tags: tagsArray, from, to, limit, offset, sort, search });
-  //       return res.status(200).json(transactions);
-  //     } catch (err) {
-  //       loggerInstance.error('🔥 error: %o', err);
-  //       return next(err);
-  //     }
-  // });
+  route.get('/:id?',
+    async (req, res, next) => {
+      const { id } = req.params
+      const { url } = req.query;
+      try {
+        if (id) {
+          const message = await messageService.findById(id);
+          if (!message) {
+            return res.sendStatus(404);
+          }
+          return res.status(200).json(message);
+        }
+        if (url) {
+          const messages = await messageService.findAllInThread({ url });
+          return res.status(200).json(messages);
+        }
+        return res.sendStatus(404);
+      } catch (err) {
+        loggerInstance.error('🔥 error: %o', err);
+        return next(err);
+      }
+  });
 
   // route.delete('/:id',
   //   middlewares.isAuth,
