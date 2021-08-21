@@ -5,7 +5,7 @@ import { verifyToken } from "../../services/auth.js";
 /**
  * This middleware can take auth token from headers or from query parameter
  */
-export default (req, res, next) => {
+export default async (req, res, next) => {
   const loggerInstance = Container.get('loggerInstance');
   if (!req.headers.authorization && !req.query.auth) {
       return res.sendStatus(403);
@@ -16,7 +16,7 @@ export default (req, res, next) => {
     console.log('using token from url', token)
   }
   try {
-    const user = verifyToken(token);
+    const user = await verifyToken(token);
     // injection of user into request
     req.user = user;
     return next();

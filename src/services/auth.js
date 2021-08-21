@@ -3,23 +3,20 @@ import jwt from 'jsonwebtoken';
 import config from '../config/index.js';
 
 // Verify Token validity and attach token data as request attribute
-export const verifyToken = (token) => {
-  jwt.verify(token, config.jwtSecret, { algorithms: [ config.jwtAlgorithm ]}, async (err, payload) => {
-    if (err) { // checks validity and expiration.
-      throw new Error('unauthorized');
-    } else {
-      const sequelize = Container.get('sequelizeInstance');
-      const userModel = sequelize.models.users;
-      const user = await userModel.findOne({ where: { id: payload?.userId || '' } });
-      if (!user) {
-        throw new Error('unauthorized');
-      }
-      return {
-        email: user.dataValues.email,
-        id: user.dataValues.id,
-      };
-    }
-  });
+export const verifyToken = async (token) => {
+  const payload = jwt.verify(token, config.jwtSecret, { algorithms: [ config.jwtAlgorithm ]});
+  const sequelize = Container.get('sequelizeInstance');
+  const userModel = sequelize.models.users;
+  const user = await userModel.findOne({ where: { id: payload?.userId || '' } });
+  if (!user) {
+    throw new Error('unauthorized');
+  }
+
+  return {
+    email: user.dataValues.email,
+    id: user.dataValues.id,
+  };
+
 };
 
 // Issue Token, add userId to token

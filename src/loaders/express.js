@@ -12,5 +12,5 @@ export default ({ app }) => {
   app.use(cors());
   app.use(bodyParser.json());
   app.use(config.api.prefix, routes());
-  // app.use(errors());
+  app.use(errors());
 };
