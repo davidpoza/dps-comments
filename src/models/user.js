@@ -7,6 +7,7 @@ export const definition = [
     email: { type: Sequelize.STRING, allowNull: false, unique: true },
     name: Sequelize.TEXT,
     admin: { type: Sequelize.BOOLEAN, defaultValue: false },
+    avatar: { type: Sequelize.STRING },
     createdAt: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
     updatedAt: { type: Sequelize.DATE }
   }, {

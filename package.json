@@ -30,6 +30,7 @@
     "passport-google-oauth20": "^2.0.0",
     "sequelize": "^6.3.5",
     "sqlite3": "^5.0.1",
+    "typedi": "^0.10.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.10.0"
   }

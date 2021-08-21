@@ -1,7 +1,7 @@
 import passportLoader from './passport.js';
 import expressLoader from './express.js';
 import sequelizeLoader from './sequelize.js';
-// import diLoader from './di.js';
+import diLoader from './di.js';
 import logger from './logger.js';
 // import Scheduler from './scheduler.js';
 // import AuthService from '../services/auth.js';
@@ -19,26 +19,12 @@ export default async ({ expressApp }) => {
   const sequelize = await sequelizeLoader.newConnection();
   logger.info('🟢 Database loaded');
 
-  // diLoader({
-  //   sequelize,
-  //   logger,
-  //   AuthService,
-  //   UserService,
-  //   TransactionService,
-  //   AccountService,
-  //   TagService,
-  //   RuleService,
-  //   RecurrentService,
-  //   BudgetService,
-  //   OpenbankImporter,
-  //   AttachmentService,
-  //   AES,
-  //   dayjs,
-  //   sharp,
-  //   Queue,
-  //   //<-- add scheduler as last dependency
-  // });
-  // logger.info('🟢 Dependency injection loaded');
+  diLoader({
+    sequelize,
+    logger,
+  });
+  logger.info('🟢 Dependency injection loaded');
+
   await passportLoader();
   logger.info('🟢 Passport loaded');
 
