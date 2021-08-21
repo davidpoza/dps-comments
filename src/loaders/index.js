@@ -1,6 +1,6 @@
 import passportLoader from './passport.js';
 import expressLoader from './express.js';
-// import sequelizeLoader from './sequelize.js';
+import sequelizeLoader from './sequelize.js';
 // import diLoader from './di.js';
 import logger from './logger.js';
 // import Scheduler from './scheduler.js';
@@ -16,8 +16,8 @@ import logger from './logger.js';
 // import AttachmentService from '../services/attachment.js';
 
 export default async ({ expressApp }) => {
-  // const sequelize = await sequelizeLoader.newConnection();
-  // logger.info('🟢 Database loaded');
+  const sequelize = await sequelizeLoader.newConnection();
+  logger.info('🟢 Database loaded');
 
   // diLoader({
   //   sequelize,

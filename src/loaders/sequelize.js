@@ -1,16 +1,12 @@
 import Sequelize from 'sequelize';
 
-import config from '../config/config.js';
+import config from '../config/index.js';
 import applyExtraSetup from '../models/extra-setup.js';
 
 import User from '../models/user.js';
-import Transaction from '../models/transaction.js';
-import Tag from '../models/tag.js';
-import Account from '../models/account.js';
-import Rule from '../models/rule.js';
-import RecurrentPayment from '../models/recurrent-payment.js';
-import Budget from '../models/budget.js';
-import Attachment from '../models/attachment.js';
+import Message from '../models/message.js';
+import Thread from '../models/thread.js';
+
 
 let sequelize;
 export default {
@@ -19,13 +15,8 @@ export default {
 
     const modelDefiners = [
       User,
-      Transaction,
-      Tag,
-      Account,
-      Rule,
-      RecurrentPayment,
-      Budget,
-      Attachment,
+      Message,
+      Thread,
     ];
     // We define all models according to their files.
     for (const modelDefiner of modelDefiners) {
