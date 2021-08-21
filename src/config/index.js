@@ -38,5 +38,8 @@ export default {
   jwtSecret: process.env.JWT_SECRET,
   jwtAlgorithm: process.env.JWT_ALGORITHM || 'HS256',
   aesPassphrase: process.env.AES_PASSPHRASE,
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  googleCallbackUrl: process.env.GOOGLE_CALLBACK_URL,
 };
 

@@ -1,7 +1,8 @@
 import { Router } from 'express';
 
+
 // own
-// import auth from './routes/auth.js';
+import passport from './routes/passport.js';
 // import user from './routes/user.js';
 // import account from './routes/account.js';
 // import transaction from './routes/transaction.js';
@@ -13,7 +14,7 @@ import { Router } from 'express';
 
 export default () => {
   const app = Router();
-  // auth(app);
+  passport(app);
   // user(app);
   // account(app);
   // transaction(app);
