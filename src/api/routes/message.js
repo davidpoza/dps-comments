@@ -37,7 +37,7 @@ export default (app) => {
           }
         );
         if (!message) {
-          res.sendStatus(403);
+          return res.sendStatus(403);
         }
         res.status(201).json(message);
       } catch (err) {

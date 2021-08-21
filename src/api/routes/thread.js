@@ -23,15 +23,12 @@ export default (app) => {
       const {
         url,
        } = req.body;
-      const userId = req.user?.id;
+      const isAdmin = req.user?.admin;
+      if (!isAdmin) return res.sendStatus(403);
       try {
-        const thread = await threadService.create(
-          {
-            url
-          }
-        );
+        const thread = await threadService.create({ url });
         if (!thread) {
-          res.sendStatus(403);
+          return res.sendStatus(403);
         }
         res.status(201).json(thread);
       } catch (err) {

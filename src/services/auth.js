@@ -15,6 +15,7 @@ export const verifyToken = async (token) => {
   return {
     email: user.dataValues.email,
     id: user.dataValues.id,
+    admin: user.dataValues.admin,
   };
 
 };
