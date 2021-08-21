@@ -75,5 +75,6 @@ export default class MessageService {
     if (affectedRows === 0) {
       throw new Error('Message does not exist');
     }
+    return true;
   }
 };

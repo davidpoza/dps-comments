@@ -78,22 +78,6 @@ export default (app) => {
       }
     });
 
-  // // get totals for each tag of given transactions
-  // route.get('/tags',
-  // middlewares.isAuth,
-  // async (req, res, next) => {
-  //   const userId = req.user.id;
-  //   const { accountId, from, to } = req.query;
-  //   const transactionService = Container.get('transactionService');
-  //   try {
-  //     const transactions = await transactionService.calculateExpensesByTags({ accountId, userId, from, to });
-  //     return res.status(200).json(transactions);
-  //   } catch (err) {
-  //     loggerInstance.error('🔥 error: %o', err);
-  //     return next(err);
-  //   }
-  // });
-
   route.get('/:id?',
     async (req, res, next) => {
       const { id } = req.params
@@ -117,21 +101,21 @@ export default (app) => {
       }
   });
 
-  // route.delete('/:id',
-  //   middlewares.isAuth,
-  //   async (req, res, next) => {
-  //     const { id } = req.params
-  //     const userId = req.user.id;
-  //     const transactionService = Container.get('transactionService');
-  //     try {
-  //       if (!await transactionService.deleteById(id, userId)) {
-  //         return res.sendStatus(404);
-  //       }
-  //       return res.sendStatus(204);
-  //     } catch (err) {
-  //       loggerInstance.error('🔥 error: %o', err);
-  //       console.log('ERRRR', err);
-  //       return res.sendStatus(404);
-  //     }
-  // });
+  route.delete('/:id',
+    middlewares.isAuth,
+    async (req, res, next) => {
+      const { id } = req.params
+      const isAdmin = req.user.admin;
+      if (!isAdmin) return res.sendStatus(403);
+      try {
+        if (!await messageService.deleteById(id)) {
+          return res.sendStatus(404);
+        }
+        return res.sendStatus(204);
+      } catch (err) {
+        loggerInstance.error('🔥 error: %o', err);
+        console.log('ERRRR', err);
+        return res.sendStatus(404);
+      }
+  });
 };
