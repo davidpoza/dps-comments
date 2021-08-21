@@ -48,10 +48,10 @@ export default class MessageService {
   async findAllInThread({ url }) {
     const thread = await this.threadService.findByUrl(url);
     if (!thread) return null;
-    const messages = await this.messageModel.findAll({ where: { threadId: thread.id } });
-    return messages.map((m) => {
+    const messages = await this.messageModel.findAll({ where: { threadId: thread.id, parentId: null } });
+    return await Promise.all(messages.map((m) => {
       return (this.getTemplate(m));
-    });
+    }));
   }
 
   async findById(id) {
