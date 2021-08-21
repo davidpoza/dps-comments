@@ -5,6 +5,13 @@ export default class ThreadService {
     this.sequelize = Container.get('sequelizeInstance');
     this.logger = Container.get('loggerInstance');
     this.threadModel = this.sequelize.models.threads;
+    this.getTemplate = this.getTemplate.bind(this);
+    this.create = this.create.bind(this);
+    this.findAll = this.findAll.bind(this);
+    this.findById = this.findById.bind(this);
+    this.findByUrl = this.findByUrl.bind(this);
+    this.updateById = this.updateById.bind(this);
+    this.deleteById = this.deleteById.bind(this);
   }
 
   async getTemplate(thread) {

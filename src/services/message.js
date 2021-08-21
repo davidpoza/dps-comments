@@ -6,7 +6,12 @@ export default class MessageService {
     this.logger = Container.get('loggerInstance');
     this.messageModel = this.sequelize.models.messages;
     this.threadService = Container.get('threadService');
-
+    this.getTemplate = this.getTemplate.bind(this);
+    this.create = this.create.bind(this);
+    this.findAllInThread = this.findAllInThread.bind(this);
+    this.findById = this.findById.bind(this);
+    this.updateById = this.updateById.bind(this);
+    this.deleteById = this.deleteById.bind(this);;
   }
 
   // get only one level of responses
