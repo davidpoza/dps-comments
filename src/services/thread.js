@@ -7,11 +7,13 @@ export default class ThreadService {
     this.threadModel = this.sequelize.models.threads;
   }
 
-  getTemplate(thread) {
+  async getTemplate(thread) {
     if (thread) {
+      const messages = await thread.getMessages();
       return ({
         id: thread.id,
         url: thread.url,
+        messages,
         createdAt: thread.createdAt,
         updatedAt: thread.updatedAt,
       });
@@ -44,7 +46,7 @@ export default class ThreadService {
     if (!thread) {
       return null;
     }
-    return (this.getTemplate(thread));
+    return (await this.getTemplate(thread));
   }
 
   async findByUrl(url) {
@@ -52,7 +54,7 @@ export default class ThreadService {
     if (!thread) {
       return null;
     }
-    return (this.getTemplate(thread));
+    return (await this.getTemplate(thread));
   }
 
   async updateById(id, values) {

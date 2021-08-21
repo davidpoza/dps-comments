@@ -8,6 +8,7 @@ const route = Router();
 
 export default (app) => {
   const loggerInstance = Container.get('loggerInstance');
+  const threadService = Container.get('threadService');
 
   app.use('/threads', route);
 
@@ -19,7 +20,7 @@ export default (app) => {
       }),
     }),
     async (req, res, next) => {
-      const threadService = Container.get('threadService');
+
       const {
         url,
        } = req.body;
@@ -121,45 +122,52 @@ export default (app) => {
   //   }
   // });
 
-  // route.get('/:id?',
-  //   middlewares.isAuth,
-  //   async (req, res, next) => {
-  //     const { id } = req.params
-  //     const userId = req.user.id;
-  //     const { accountId, tags, limit, sort, offset, from, to, search } = req.query;
-  //     const tagsArray = tags ? tags.split(',').map((id) => parseInt(id, 10)) : undefined;
-  //     const transactionService = Container.get('transactionService');
-  //     try {
-  //       if (id) {
-  //         const transaction = await transactionService.findById({ id, userId });
-  //         if (!transaction) {
-  //           return res.sendStatus(404);
-  //         }
-  //         return res.status(200).json(transaction);
-  //       }
-  //       const transactions = await transactionService.findAll({ accountId, userId, tags: tagsArray, from, to, limit, offset, sort, search });
-  //       return res.status(200).json(transactions);
-  //     } catch (err) {
-  //       loggerInstance.error('🔥 error: %o', err);
-  //       return next(err);
-  //     }
-  // });
+  route.get('/:id?',
+    middlewares.isAuth,
+    async (req, res, next) => {
+      const { id } = req.params
+      const { url } = req.query;
+      let thread;
+      try {
+        if (id) {
+          thread = await threadService.findById(id);
+          if (!thread) {
+            return res.sendStatus(404);
+          }
+          return res.status(200).json(thread);
+        } else if (url) {
+          thread = await threadService.findByUrl(url);
+          if (!thread) {
+            return res.sendStatus(404);
+          }
+          return res.status(200).json(thread);
+        }
+        const threads = await threadService.findAll();
+        return res.status(200).json(await Promise.all(threads.map(
+          (t) => { return threadService.getTemplate(t); }
+        )));
+      } catch (err) {
+        loggerInstance.error('🔥 error: %o', err);
+        return next(err);
+      }
+  });
 
-  // route.delete('/:id',
-  //   middlewares.isAuth,
-  //   async (req, res, next) => {
-  //     const { id } = req.params
-  //     const userId = req.user.id;
-  //     const transactionService = Container.get('transactionService');
-  //     try {
-  //       if (!await transactionService.deleteById(id, userId)) {
-  //         return res.sendStatus(404);
-  //       }
-  //       return res.sendStatus(204);
-  //     } catch (err) {
-  //       loggerInstance.error('🔥 error: %o', err);
-  //       console.log('ERRRR', err);
-  //       return res.sendStatus(404);
-  //     }
-  // });
+  route.delete('/:id',
+    middlewares.isAuth,
+    async (req, res, next) => {
+      const { id } = req.params
+      const isAdmin = req.user.admin;
+      const threadService = Container.get('threadService');
+      if (!isAdmin) return res.sendStatus(403);
+      try {
+        if (!await threadService.deleteById(id)) {
+          return res.sendStatus(404);
+        }
+        return res.sendStatus(204);
+      } catch (err) {
+        loggerInstance.error('🔥 error: %o', err);
+        console.log('ERRRR', err);
+        return res.sendStatus(404);
+      }
+  });
 };

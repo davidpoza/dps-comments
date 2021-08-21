@@ -2,8 +2,8 @@
 export default function applyExtraSetup(sequelize) {
   const { users, messages, threads } = sequelize.models;
 
-  threads.hasMany(messages);
   messages.belongsTo(threads);
+  threads.hasMany(messages);
   messages.belongsTo(messages, { foreignKey: 'parentId' });
   messages.hasMany(messages, { foreignKey: 'parentId', as: 'responses' });
   users.hasMany(messages);
