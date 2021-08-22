@@ -4,7 +4,7 @@ export const definition = [
   'threads',
   {
     id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
-    url: { type: Sequelize.STRING, allowNull: false, primaryKey: true },
+    url: { type: Sequelize.STRING, allowNull: false, unique: true },
     createdAt: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
     updatedAt: { type: Sequelize.DATE }
   }, {

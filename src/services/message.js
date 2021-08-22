@@ -8,7 +8,6 @@ export default class MessageService {
     this.threadService = Container.get('threadService');
 
     this.create = this.create.bind(this);
-    this.findAllInThread = this.findAllInThread.bind(this);
     this.findById = this.findById.bind(this);
     this.updateById = this.updateById.bind(this);
     this.deleteById = this.deleteById.bind(this);;
@@ -48,15 +47,6 @@ export default class MessageService {
       this.logger.error(err);
       throw err;
     }
-  }
-
-  async findAllInThread({ url }) {
-    const thread = await this.threadService.findByUrl(url);
-    if (!thread) return null;
-    const messages = await this.messageModel.findAll({ where: { threadId: thread.id, parentId: null } });
-    return await Promise.all(messages.map((m) => {
-      return (MessageService.getTemplate(m));
-    }));
   }
 
   async findById(id) {

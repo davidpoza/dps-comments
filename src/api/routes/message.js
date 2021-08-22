@@ -81,7 +81,6 @@ export default (app) => {
   route.get('/:id?',
     async (req, res, next) => {
       const { id } = req.params
-      const { url } = req.query;
       try {
         if (id) {
           const message = await messageService.findById(id);
@@ -89,10 +88,6 @@ export default (app) => {
             return res.sendStatus(404);
           }
           return res.status(200).json(message);
-        }
-        if (url) {
-          const messages = await messageService.findAllInThread({ url });
-          return res.status(200).json(messages);
         }
         return res.sendStatus(404);
       } catch (err) {
