@@ -18,7 +18,7 @@ export default (app) => {
     celebrate({
       body: Joi.object({
         threadId: Joi.number().required(),
-        content: Joi.string().max(300).required(),
+        content: Joi.string().min(1).max(300).required(),
         parentId: Joi.number(),
       }),
     }),
