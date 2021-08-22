@@ -4,6 +4,7 @@ import { celebrate, Joi } from 'celebrate';
 
 import config from '../../config/index.js';
 import middlewares from '../middlewares/index.js';
+import { paragraphTags } from '../../shared/utils.js';
 
 const route = Router();
 
@@ -34,7 +35,7 @@ export default (app) => {
           {
             threadId,
             userId,
-            content: sanitizeHtml(content, config.sanitizeHtmlConfig),
+            content: paragraphTags(sanitizeHtml(content, config.sanitizeHtmlConfig)),
             parentId,
           }
         );
@@ -67,7 +68,7 @@ export default (app) => {
       try {
         const message = await messageService.updateById(id, userId,
           {
-            content: sanitizeHtml(content, config.sanitizeHtmlConfig),
+            content: paragraphTags(sanitizeHtml(content, config.sanitizeHtmlConfig)),
           }
         );
         if (!message) {
