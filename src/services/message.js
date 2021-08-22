@@ -1,4 +1,5 @@
 import { Container } from 'typedi';
+import UserService from '../services/user.js';
 
 export default class MessageService {
   constructor() {
@@ -17,14 +18,16 @@ export default class MessageService {
   static async getTemplate(message) {
     if (message) {
       const responses = message.getResponses ? await message.getResponses() : [];
+      const user = message.getUser ? await message.getUser() : {};
       return ({
         id: message.id,
         content: message.content,
         threadId: message.threadId,
         parentId: message.parentId,
-        userId: message.userId,
+        // userId: message.userId,
+        user: UserService.getTemplate(user),
         responses: await Promise.all(responses?.map(async (r) => {
-          return MessageService.getTemplate(r.dataValues)
+          return MessageService.getTemplate(r)
         })),
         createdAt: message.createdAt,
         updatedAt: message.updatedAt,
