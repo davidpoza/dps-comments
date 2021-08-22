@@ -32,13 +32,13 @@ jobs:
           envs: JWT_SECRET,JWT_LIFETIME,JWT_ALGORITHM
           script: |
             pwd
-            cd  dps-comments
+            cd dps-comments
             rm .env
             echo "DEBUG=$DEBUG" >> .env
             echo "JWT_SECRET=$JWT_SECRET" >> .env
             echo "JWT_LIFETIME=$JWT_LIFETIME" >> .env
             echo "JWT_ALGORITHM=$JWT_ALGORITHM" >> .env
             git fetch
-            git reset --hard origin/master
+            git reset --hard origin/main
             make build
             make start
