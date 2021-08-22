@@ -21,6 +21,9 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           JWT_LIFETIME: ${{ secrets.JWT_LIFETIME }}
           JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_CALLBACK_URL: ${{ secrets.GOOGLE_CALLBACK_URL }}
         with:
           debug: true
           host: ${{ secrets.SSH_HOST }}
@@ -29,7 +32,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           timeout: '180s'
           key: ${{ secrets.SSH_KEY }}
-          envs: JWT_SECRET,JWT_LIFETIME,JWT_ALGORITHM
+          envs: JWT_SECRET,JWT_LIFETIME,JWT_ALGORITHM,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_CALLBACK_URL
           script: |
             pwd
             cd dps-comments
@@ -38,6 +41,9 @@ jobs:
             echo "JWT_SECRET=$JWT_SECRET" >> .env
             echo "JWT_LIFETIME=$JWT_LIFETIME" >> .env
             echo "JWT_ALGORITHM=$JWT_ALGORITHM" >> .env
+            echo "GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" >> .env
+            echo "GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET" >> .env
+            echo "GOOGLE_CALLBACK_URL=$GOOGLE_CALLBACK_URL" >> .env
             git fetch
             git reset --hard origin/main
             make build
