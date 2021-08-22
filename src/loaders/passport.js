@@ -12,8 +12,9 @@ export default () => {
         clientID: config.googleClientId,
         clientSecret: config.googleClientSecret,
         callbackURL: config.googleCallbackUrl,
+        passReqToCallback: true,
       },
-      async function (accessToken, refreshToken, profile, cb) {
+      async function (req, accessToken, refreshToken, profile, cb) {
         try {
           let user = await sequelize.models.users.findOne({ where: { email: profile.emails[0].value } });
           if (!user) {
@@ -26,6 +27,7 @@ export default () => {
           cb(null, { // injects user in req.user
             email: user.dataValues.email,
             id: user.dataValues.id,
+            backUrl: req.query.state,
           });
         } catch(err) {
           cb(err, null);

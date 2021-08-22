@@ -10,12 +10,16 @@ export default (app) => {
 
   route.get(
     '/',
-    passport.authenticate('google', {
-      session: false,
-      scope: ['profile', 'email'],
-      accessType: 'offline',
-      approvalPrompt: 'force'
-    })
+    // wrapped passport middleware to inject query parameter as state
+    (req, res, next) => {
+      passport.authenticate('google', {
+        session: false,
+        scope: ['profile', 'email'],
+        accessType: 'offline',
+        approvalPrompt: 'force',
+        state: req.query.backUrl,
+      })(req, res, next);
+    }
   );
 
   // callback url upon successful google authentication
