@@ -26,7 +26,9 @@ export const signToken = (req, res) => {
     if(err){
         res.sendStatus(500);
     } else {
-        res.json({ token });
+        // res.json({ token });
+        const backURL=req.header('Referer') || '/';
+        res.redirect(`${backURL}?token=${token}`);
     }
   });
 }
