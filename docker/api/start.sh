@@ -1,4 +1,6 @@
 #!/bin/ash
 
-node scripts/db-init.js
-npm run start-dev
+if [ ! -f /usr/src/app/data/database.sql ]; then
+  node scripts/db-init.js
+fi
+npm run start

@@ -15,7 +15,7 @@ RUN pip3 install --no-cache --upgrade pip setuptools
 
 # .env must be at WORKDIR to be found by dotenv package
 RUN git clone https://github.com/davidpoza/dps-comments.git .
-WORKDIR /usr/src/app/api
+WORKDIR /usr/src/app
 COPY .env .
 COPY ./docker/api/start.sh .
 RUN ls -la
