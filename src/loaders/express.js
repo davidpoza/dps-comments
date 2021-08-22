@@ -9,7 +9,9 @@ import config from '../config/index.js';
 export default ({ app }) => {
   // It shows the real origin IP if behind proxy
   app.enable('trust proxy');
-  app.use(cors());
+  app.use(cors({
+    origin: ['https://davidinformatico.com']
+  }));
   app.use(bodyParser.json());
   app.use(config.api.prefix, routes());
   app.use(errors());
