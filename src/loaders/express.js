@@ -10,7 +10,7 @@ export default ({ app }) => {
   // It shows the real origin IP if behind proxy
   app.enable('trust proxy');
   app.use(cors({
-    origin: ['https://davidinformatico.com']
+    origin: ['https://davidinformatico.com', 'http://localhost:8000']
   }));
   app.use(bodyParser.json());
   app.use(config.api.prefix, routes());
