@@ -6,9 +6,13 @@ export default ({
   logger,
   MessageService,
   ThreadService,
+  sanitizeHtml,
 
 }) => {
   // dependency order is important, services are dependant of sequelize and logger
+
+  Container.set('sanitizeHtml', sanitizeHtml);
+  logger.info('💉 sanitizeHtml injected');
 
   Container.set('sequelizeInstance', sequelize);
   logger.info('💉 sequelizeInstance injected');

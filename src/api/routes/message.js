@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { Container } from 'typedi';
 import { celebrate, Joi } from 'celebrate';
 
+import config from '../../config/index.js';
 import middlewares from '../middlewares/index.js';
 
 const route = Router();
@@ -9,6 +10,7 @@ const route = Router();
 export default (app) => {
   const loggerInstance = Container.get('loggerInstance');
   const messageService = Container.get('messageService');
+  const sanitizeHtml = Container.get('sanitizeHtml');
   app.use('/messages', route);
 
   route.post('/',
@@ -16,7 +18,7 @@ export default (app) => {
     celebrate({
       body: Joi.object({
         threadId: Joi.number().required(),
-        content: Joi.string().required(),
+        content: Joi.string().max(300).required(),
         parentId: Joi.number(),
       }),
     }),
@@ -32,7 +34,7 @@ export default (app) => {
           {
             threadId,
             userId,
-            content,
+            content: sanitizeHtml(content, config.sanitizeHtmlConfig),
             parentId,
           }
         );
@@ -65,7 +67,7 @@ export default (app) => {
       try {
         const message = await messageService.updateById(id, userId,
           {
-            content
+            content: sanitizeHtml(content, config.sanitizeHtmlConfig),
           }
         );
         if (!message) {
