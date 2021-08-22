@@ -3,6 +3,7 @@ import { Container } from 'typedi';
 import { celebrate, Joi } from 'celebrate';
 
 import middlewares from '../middlewares/index.js';
+import ThreadService from '../../services/thread.js';
 
 const route = Router();
 
@@ -134,17 +135,17 @@ export default (app) => {
           if (!thread) {
             return res.sendStatus(404);
           }
-          return res.status(200).json(thread);
+          return res.status(200).json(await ThreadService.getTemplate(thread));
         } else if (url) {
           thread = await threadService.findByUrl(url);
           if (!thread) {
             return res.sendStatus(404);
           }
-          return res.status(200).json(thread);
+          return res.status(200).json(await ThreadService.getTemplate(thread));
         }
         const threads = await threadService.findAll();
         return res.status(200).json(await Promise.all(threads.map(
-          (t) => { return threadService.getTemplate(t); }
+          (t) => { return ThreadService.getTemplate(t); }
         )));
       } catch (err) {
         loggerInstance.error('🔥 error: %o', err);

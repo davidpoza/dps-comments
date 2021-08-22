@@ -6,7 +6,7 @@ export default class MessageService {
     this.logger = Container.get('loggerInstance');
     this.messageModel = this.sequelize.models.messages;
     this.threadService = Container.get('threadService');
-    this.getTemplate = this.getTemplate.bind(this);
+
     this.create = this.create.bind(this);
     this.findAllInThread = this.findAllInThread.bind(this);
     this.findById = this.findById.bind(this);
@@ -15,7 +15,7 @@ export default class MessageService {
   }
 
   // get only one level of responses
-  async getTemplate(message) {
+  static async getTemplate(message) {
     if (message) {
       const responses = message.getResponses ? await message.getResponses() : [];
       return ({
@@ -25,7 +25,7 @@ export default class MessageService {
         parentId: message.parentId,
         userId: message.userId,
         responses: await Promise.all(responses?.map(async (r) => {
-          return await this.getTemplate(r.dataValues)
+          return MessageService.getTemplate(r.dataValues)
         })),
         createdAt: message.createdAt,
         updatedAt: message.updatedAt,
@@ -55,7 +55,7 @@ export default class MessageService {
     if (!thread) return null;
     const messages = await this.messageModel.findAll({ where: { threadId: thread.id, parentId: null } });
     return await Promise.all(messages.map((m) => {
-      return (this.getTemplate(m));
+      return (MessageService.getTemplate(m));
     }));
   }
 
@@ -64,7 +64,7 @@ export default class MessageService {
     if (!message) {
       return null;
     }
-    return (this.getTemplate(message));
+    return (MessageService.getTemplate(message));
   }
 
   async updateById(id, userId, values) {
