@@ -26,18 +26,13 @@ export default {
       },
     }
   },
-  uploadDir: process.env.UPLOAD_DIR || '/tmp',
-  uploadMaxSize: parseInt(process.env.UPLOAD_MAX_SIZE, 10) || 10,
-  uploadMaxResolution: parseInt(process.env.UPLOAD_MAX_RESOLUTION, 10) || 1920,
   api: {
     prefix: '/',
   },
   language: 'es',
-  bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS, 10) || 12,
   jwtLifetime: parseInt(process.env.JWT_LIFETIME, 10) || 86400,
   jwtSecret: process.env.JWT_SECRET,
   jwtAlgorithm: process.env.JWT_ALGORITHM || 'HS256',
-  aesPassphrase: process.env.AES_PASSPHRASE,
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   googleCallbackUrl: process.env.GOOGLE_CALLBACK_URL,

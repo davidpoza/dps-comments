@@ -1,0 +1,44 @@
+name: Deployment
+on: [push]
+jobs:
+  deploy-backend:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: script to change ip of runner1github domain
+        env:
+          HETZNER_AUTH_API_TOKEN: ${{ secrets.HETZNER_AUTH_API_TOKEN }}
+        run: |
+          chmod +x ./.github/workflows/scripts/dyndns.sh
+          ./.github/workflows/scripts/dyndns.sh -Z davidinformatico.com -n runner1github
+          sleep 120
+      - name: Executing ssh commands
+        uses: appleboy/ssh-action@master
+        env:
+          DEBUG: false
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_LIFETIME: ${{ secrets.JWT_LIFETIME }}
+          JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
+        with:
+          debug: true
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          username: ${{ secrets.SSH_USERNAME }}
+          timeout: '180s'
+          key: ${{ secrets.SSH_KEY }}
+          envs: JWT_SECRET,JWT_LIFETIME,JWT_ALGORITHM
+          script: |
+            pwd
+            cd  wheimo
+            rm .env
+            echo "DEBUG=$DEBUG" >> .env
+            echo "JWT_SECRET=$JWT_SECRET" >> .env
+            echo "JWT_LIFETIME=$JWT_LIFETIME" >> .env
+            echo "JWT_ALGORITHM=$JWT_ALGORITHM" >> .env
+            git fetch
+            git reset --hard origin/master
+            make build
+            make start
