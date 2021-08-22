@@ -73,7 +73,6 @@ export default (app) => {
     });
 
   route.get('/:id?',
-    middlewares.isAuth,
     async (req, res, next) => {
       const { id } = req.params
       const { url } = req.query;
