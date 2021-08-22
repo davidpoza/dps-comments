@@ -32,7 +32,7 @@ jobs:
           envs: JWT_SECRET,JWT_LIFETIME,JWT_ALGORITHM
           script: |
             pwd
-            cd  wheimo
+            cd  dps-comments
             rm .env
             echo "DEBUG=$DEBUG" >> .env
             echo "JWT_SECRET=$JWT_SECRET" >> .env
