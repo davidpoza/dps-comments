@@ -17,7 +17,8 @@ export default class ThreadService {
 
   static async getTemplate(thread) {
     if (thread) {
-      const messages = await thread.getMessages();
+      const messages = await thread.getMessages()
+
       return ({
         id: thread.id,
         url: thread.url,

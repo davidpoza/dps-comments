@@ -39,12 +39,14 @@ export default class MessageService {
   async create({
     content,
     userId,
-    threadId,
+    threadUrl,
     parentId,
   }) {
     try {
+      const thread = await this.threadService.findByUrl(threadUrl);
+      if (!thread) throw new Error('thread does not exist');
       const message = await this.messageModel.create(
-        { content, userId, threadId, parentId });
+        { content, userId, threadId: thread.id, parentId });
       return message;
     } catch (err) {
       this.logger.error(err);

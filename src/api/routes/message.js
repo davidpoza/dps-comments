@@ -18,14 +18,14 @@ export default (app) => {
     middlewares.isAuth,
     celebrate({
       body: Joi.object({
-        threadId: Joi.number().required(),
+        threadUrl: Joi.string().required(),
         content: Joi.string().min(1).max(300).required(),
         parentId: Joi.number(),
       }),
     }),
     async (req, res, next) => {
       const {
-        threadId,
+        threadUrl,
         content,
         parentId,
        } = req.body;
@@ -33,7 +33,7 @@ export default (app) => {
       try {
         const message = await messageService.create(
           {
-            threadId,
+            threadUrl,
             userId,
             content: paragraphTags(sanitizeHtml(content, config.sanitizeHtmlConfig)),
             parentId,
