@@ -1,5 +1,6 @@
 import { Container } from 'typedi';
 import UserService from '../services/user.js';
+import { paragraphTags } from '../shared/utils.js';
 
 export default class MessageService {
   constructor() {
@@ -21,7 +22,7 @@ export default class MessageService {
       const user = message.getUser ? await message.getUser() : {};
       return ({
         id: message.id,
-        content: message.content,
+        content: paragraphTags(message.content),
         threadId: message.threadId,
         parentId: message.parentId,
         // userId: message.userId,
