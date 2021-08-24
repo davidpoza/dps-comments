@@ -17,17 +17,21 @@ export default class ThreadService {
 
   static async getTemplate(thread) {
     if (thread) {
-      const messages = await thread.getMessages()
-
+      let messages = await thread.getMessages()
+      messages = await Promise.all(messages
+        .filter((m) => m.parentId === null)
+        .map((m) => {
+          return MessageService.getTemplate(m)
+        })
+      );
+      messages = messages.sort((a, b) => {
+        if (new Date(a.createdAt) < new Date(b.createdAt)) return 1;
+        return -1;
+      });
       return ({
         id: thread.id,
         url: thread.url,
-        messages: await Promise.all(messages
-          .filter((m) => m.parentId === null)
-          .map((m) => {
-            return MessageService.getTemplate(m)
-          })
-        ),
+        messages,
         createdAt: thread.createdAt,
         updatedAt: thread.updatedAt,
       });
