@@ -20,7 +20,12 @@ export default class ThreadService {
       let messages = await thread.getMessages({
         include: [
           { model: this.sequelize.models.users, as: 'user', duplicating: false },
-          { model: this.sequelize.models.messages, as: 'responses', duplicating: false, separate: true },
+          {
+            model: this.sequelize.models.messages, as: 'responses', duplicating: false, separate: true,
+            include: {
+              model: this.sequelize.models.users
+            }
+          },
         ],
         limit,
         offset,
