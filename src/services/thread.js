@@ -1,5 +1,4 @@
 import { Container } from 'typedi';
-import MessageService from '../services/message.js';
 
 export default class ThreadService {
   constructor() {
@@ -7,6 +6,7 @@ export default class ThreadService {
     this.logger = Container.get('loggerInstance');
     this.threadModel = this.sequelize.models.threads;
 
+    this.getTemplate = this.getTemplate.bind(this);
     this.create = this.create.bind(this);
     this.findAll = this.findAll.bind(this);
     this.findById = this.findById.bind(this);
@@ -15,18 +15,17 @@ export default class ThreadService {
     this.deleteById = this.deleteById.bind(this);
   }
 
-  static async getTemplate(thread) {
+  async getTemplate(thread, limit, offset) {
     if (thread) {
-      let messages = await thread.getMessages()
-      messages = await Promise.all(messages
-        .filter((m) => m.parentId === null)
-        .map((m) => {
-          return MessageService.getTemplate(m)
-        })
-      );
-      messages = messages.sort((a, b) => {
-        if (new Date(a.createdAt) < new Date(b.createdAt)) return 1;
-        return -1;
+      let messages = await thread.getMessages({
+        include: [
+          { model: this.sequelize.models.users, as: 'user', duplicating: false },
+          { model: this.sequelize.models.messages, as: 'responses', duplicating: false },
+        ],
+        limit,
+        offset,
+        where: { parentId: null },
+        order: [ ['createdAt', 'DESC'] ]
       });
       return ({
         id: thread.id,
@@ -65,8 +64,12 @@ export default class ThreadService {
     return (thread);
   }
 
-  async findByUrl(url) {
-    const thread = await this.threadModel.findOne({ where: { url } });
+  async findByUrl({ url, limit, offset }) {
+    const thread = await this.threadModel.findOne(
+      {
+        where: { url }
+      });
+
     if (!thread) {
       return null;
     }

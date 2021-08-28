@@ -91,6 +91,9 @@ export default (app) => {
           }
           return res.status(200).json(message);
         }
+        const { threadId } = req.query;
+        const messages = await messageService.findAll({ threadId });
+        if (messages) return res.status(200).json(messages);
         return res.sendStatus(404);
       } catch (err) {
         loggerInstance.error('🔥 error: %o', err);

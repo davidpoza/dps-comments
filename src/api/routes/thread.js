@@ -72,10 +72,14 @@ export default (app) => {
       }
     });
 
+  /**
+   * @param {string} offset - applied over messages array, not threads one
+   * @param {string} limit - applied over messages array, not threads one
+   */
   route.get('/:id?',
     async (req, res, next) => {
       const { id } = req.params
-      const { url } = req.query;
+      const { url, limit, offset } = req.query;
       let thread;
       try {
         if (id) {
@@ -83,17 +87,17 @@ export default (app) => {
           if (!thread) {
             return res.sendStatus(404);
           }
-          return res.status(200).json(await ThreadService.getTemplate(thread));
+          return res.status(200).json(await threadService.getTemplate(thread));
         } else if (url) {
-          thread = await threadService.findByUrl(url);
+          thread = await threadService.findByUrl({ url });
           if (!thread) {
             return res.sendStatus(404);
           }
-          return res.status(200).json(await ThreadService.getTemplate(thread));
+          return res.status(200).json(await threadService.getTemplate(thread, limit, offset));
         }
         const threads = await threadService.findAll();
         return res.status(200).json(await Promise.all(threads.map(
-          (t) => { return ThreadService.getTemplate(t); }
+          (t) => { return threadService.getTemplate(t); }
         )));
       } catch (err) {
         loggerInstance.error('🔥 error: %o', err);
