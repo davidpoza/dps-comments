@@ -4,6 +4,7 @@ import expressLoader from './express.js';
 import sequelizeLoader from './sequelize.js';
 import diLoader from './di.js';
 import logger from './logger.js';
+import WebhookService from '../services/webhook.js';
 import MessageService from '../services/message.js';
 import ThreadService from '../services/thread.js';
 export default async ({ expressApp }) => {
@@ -16,6 +17,7 @@ export default async ({ expressApp }) => {
     logger,
     MessageService,
     ThreadService,
+    WebhookService,
   });
   logger.info('🟢 Dependency injection loaded');
 

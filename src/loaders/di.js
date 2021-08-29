@@ -7,6 +7,7 @@ export default ({
   MessageService,
   ThreadService,
   sanitizeHtml,
+  WebhookService,
 
 }) => {
   // dependency order is important, services are dependant of sequelize and logger
@@ -19,6 +20,9 @@ export default ({
 
   Container.set('loggerInstance', logger);
   logger.info('💉 logger instance injected');
+
+  Container.set('webhookService', new WebhookService());
+  logger.info('💉 webhook service instance injected');
 
   Container.set('threadService', new ThreadService());
   logger.info('💉 thread service instance injected');

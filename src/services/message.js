@@ -8,6 +8,7 @@ export default class MessageService {
     this.logger = Container.get('loggerInstance');
     this.messageModel = this.sequelize.models.messages;
     this.threadService = Container.get('threadService');
+    this.webhookService = Container.get('webhookService');
 
     this.create = this.create.bind(this);
     this.findById = this.findById.bind(this);
@@ -45,6 +46,8 @@ export default class MessageService {
       if (!thread) throw new Error('thread does not exist');
       const message = await this.messageModel.create(
         { content, userId, threadId: thread.id, parentId });
+
+      await this.webhookService.sendMessage(`Comentario añadido en ${threadUrl}`);
       return message;
     } catch (err) {
       this.logger.error(err);
