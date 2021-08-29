@@ -38,4 +38,12 @@ export default (app) => {
       res.send('<h1>Protected route</h1>');
     }
   );
+
+  route.get(
+    '/validate',
+    middlewares.isAuth,
+    (req, res, next) => {
+      const userId = req.user.id;
+      res.status(200).json({ userId });
+    });
 }
