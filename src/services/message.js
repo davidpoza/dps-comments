@@ -46,7 +46,6 @@ export default class MessageService {
       if (!thread) throw new Error('thread does not exist');
       const message = await this.messageModel.create(
         { content, userId, threadId: thread.id, parentId });
-
       await this.webhookService.sendMessage(`Comentario añadido en ${threadUrl}`);
       return message;
     } catch (err) {
