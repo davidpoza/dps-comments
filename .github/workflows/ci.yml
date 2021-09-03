@@ -24,6 +24,7 @@ jobs:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_CALLBACK_URL: ${{ secrets.GOOGLE_CALLBACK_URL }}
+          COMMENT_POST_WEBHOOK: ${{ secrets.COMMENT_POST_WEBHOOK }}
         with:
           debug: true
           host: ${{ secrets.SSH_HOST }}
@@ -32,7 +33,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           timeout: '180s'
           key: ${{ secrets.SSH_KEY }}
-          envs: JWT_SECRET,JWT_LIFETIME,JWT_ALGORITHM,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_CALLBACK_URL
+          envs: JWT_SECRET,JWT_LIFETIME,JWT_ALGORITHM,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_CALLBACK_URL,COMMENT_POST_WEBHOOK
           script: |
             pwd
             cd dps-comments
@@ -44,6 +45,7 @@ jobs:
             echo "GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" >> .env
             echo "GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET" >> .env
             echo "GOOGLE_CALLBACK_URL=$GOOGLE_CALLBACK_URL" >> .env
+            echo "COMMENT_POST_WEBHOOK=$COMMENT_POST_WEBHOOK" >> .env
             git fetch
             git reset --hard origin/main
             make build
