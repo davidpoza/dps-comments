@@ -7,6 +7,8 @@ import logger from './logger.js';
 import WebhookService from '../services/webhook.js';
 import MessageService from '../services/message.js';
 import ThreadService from '../services/thread.js';
+import BayesianFilterService from '../services/bayes.js';
+
 export default async ({ expressApp }) => {
   const sequelize = await sequelizeLoader.newConnection();
   logger.info('🟢 Database loaded');
@@ -18,6 +20,7 @@ export default async ({ expressApp }) => {
     MessageService,
     ThreadService,
     WebhookService,
+    BayesianFilterService,
   });
   logger.info('🟢 Dependency injection loaded');
 

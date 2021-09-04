@@ -9,6 +9,7 @@ export default class MessageService {
     this.messageModel = this.sequelize.models.messages;
     this.threadService = Container.get('threadService');
     this.webhookService = Container.get('webhookService');
+    this.bayesianFilterService = Container.get('bayesianFilterService');
 
     this.create = this.create.bind(this);
     this.findById = this.findById.bind(this);
@@ -42,11 +43,16 @@ export default class MessageService {
     parentId,
   }) {
     try {
+      let isSpam = false;
       const thread = await this.threadService.findByUrl({ url: threadUrl });
       if (!thread) throw new Error('thread does not exist');
+      if (this.bayesianFilterService.classify(content) === 'spam') {
+        await this.webhookService.sendMessage(`🐛Spam detected on: ${threadUrl}`);
+        isSpam = true;
+      }
       const message = await this.messageModel.create(
-        { content, userId, threadId: thread.id, parentId });
-      await this.webhookService.sendMessage(`Comentario añadido en ${threadUrl}`);
+        { content, userId, threadId: thread.id, parentId, isSpam });
+      if (!isSpam) await this.webhookService.sendMessage(`New comment on: ${threadUrl}`);
       return message;
     } catch (err) {
       this.logger.error(err);
@@ -56,7 +62,8 @@ export default class MessageService {
 
   async findAll({ threadId, limit, offset }) {
     let filter = pickBy({ // pickBy (by default) removes undefined keys
-      threadId
+      threadId,
+      isSpam: false,
     });
     const messages = await this.messageModel.findAll(
       {

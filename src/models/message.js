@@ -5,6 +5,7 @@ export const definition = [
   {
     id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
     content: { type: Sequelize.TEXT, allowNull: true },
+    isSpam: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
     threadId: {
       type: Sequelize.INTEGER,
       allowNull: false,

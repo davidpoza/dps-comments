@@ -1,9 +1,16 @@
 import { Router } from 'express';
 import { Container } from 'typedi';
 import { celebrate, Joi } from 'celebrate';
+import rateLimit from 'express-rate-limit';
 
 import config from '../../config/index.js';
 import middlewares from '../middlewares/index.js';
+
+const apilimiter = rateLimit({
+  windowMs: 60 * 1000, // 1min
+  max: 10 // requests
+});
+
 
 const route = Router();
 
@@ -14,6 +21,7 @@ export default (app) => {
   app.use('/messages', route);
 
   route.post('/',
+    apilimiter,
     middlewares.isAuth,
     celebrate({
       body: Joi.object({

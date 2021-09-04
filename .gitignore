@@ -107,3 +107,5 @@ dist
 
 # docker volumes
 redis-volume
+
+bayes_state.json

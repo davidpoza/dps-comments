@@ -8,18 +8,21 @@ export default ({
   ThreadService,
   sanitizeHtml,
   WebhookService,
+  BayesianFilterService,
 
 }) => {
   // dependency order is important, services are dependant of sequelize and logger
+  Container.set('loggerInstance', logger);
+  logger.info('💉 logger instance injected');
+
+  Container.set('bayesianFilterService', new BayesianFilterService());
+  logger.info('💉 bayesianFilterService injected');
 
   Container.set('sanitizeHtml', sanitizeHtml);
   logger.info('💉 sanitizeHtml injected');
 
   Container.set('sequelizeInstance', sequelize);
   logger.info('💉 sequelizeInstance injected');
-
-  Container.set('loggerInstance', logger);
-  logger.info('💉 logger instance injected');
 
   Container.set('webhookService', new WebhookService());
   logger.info('💉 webhook service instance injected');

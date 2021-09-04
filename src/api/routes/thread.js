@@ -3,7 +3,6 @@ import { Container } from 'typedi';
 import { celebrate, Joi } from 'celebrate';
 
 import middlewares from '../middlewares/index.js';
-import ThreadService from '../../services/thread.js';
 
 const route = Router();
 
