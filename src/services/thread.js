@@ -32,7 +32,7 @@ export default class ThreadService {
         where: { parentId: null, isSpam: false },
         order: [ ['createdAt', 'DESC'] ]
       });
-      const messagesCount = await this.sequelize.models.messages.count({ where: { threadId: thread.id }});
+      const messagesCount = await this.sequelize.models.messages.count({ where: { threadId: thread.id, isSpam: false }});
       return ({
         id: thread.id,
         url: thread.url,
